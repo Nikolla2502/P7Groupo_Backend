@@ -1,14 +1,17 @@
 const express = require('express');
-const mysql = require('mysql');
 const app = express();
+app.use(express.json()); // bodyparser deprecated
 
 
-// liaison fichier environneemet
+const mysql = require('mysql');
+
+// liaison fichier environnemet
 require('dotenv').config()
 
 
 // connection MySQL
 const db = mysql.createConnection({
+    database: "groupo",
     host: "localhost",
     user: process.env.USER,
     password: process.env.PASSWORD,

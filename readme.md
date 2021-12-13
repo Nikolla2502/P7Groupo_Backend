@@ -15,7 +15,7 @@ Développer les parties front-end et back-end de l'application.
 <li>Developpement avec Node JS</li>
 <li>Lancer le serveur Backend avec <strong>nodemon server</strong></li>
 </ul>
-Dependances Requises :
+<strong>Dependances Requises :</strong>
 <ul>
 <li>Express</li>
 <li>mySql</li>
