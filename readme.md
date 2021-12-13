@@ -1,4 +1,4 @@
-<img src="images/icon-left.png">
+<img src="images/logo.png">
 <h2>Backend du projet 7 de la formation "Developpeur Web" pour OpenClassroom</h2>
 <h3>Objectif</h3>
 Construire un réseau social interne pour les employés de Groupomania.<br>
