@@ -11,7 +11,7 @@ require('dotenv').config()
 
 // connection MySQL
 const db = mysql.createConnection({
-    database: "groupo",
+    database: "groupomania",
     host: "localhost",
     user: process.env.USER,
     password: process.env.PASSWORD,

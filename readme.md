@@ -20,4 +20,5 @@ Développer les parties front-end et back-end de l'application.
 <li>Express</li>
 <li>mySql</li>
 <li>dotenv</li>
+<li>jsonwebtoken</li>
 </ul>
