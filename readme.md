@@ -21,4 +21,13 @@ Développer les parties front-end et back-end de l'application.
 <li>mySql</li>
 <li>dotenv</li>
 <li>jsonwebtoken</li>
+<li>multer<br>
+npm install multer</li>
 </ul>
+
+ <h4>Fichier ".env.dist" :</h4>
+ Ouvrir le fichier ".env.dist"<br>
+ Inserer votre identifiant et mot de passe MySQL.<br>
+ Renseigner votre chaîne secrète pour JsonWebToken.<br>
+ Modifier l'extension du fichier ".env.dist" par ".env".<br>
+ La connexion à MySQL sera alors possible.<br>
