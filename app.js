@@ -3,7 +3,7 @@ const app = express();
 app.use(express.json()); // bodyparser deprecated
 
 const path = require('path');
-
+const helmet = require('helmet');     // prevention contre les attaques XSS dans les HTTP headers
 const mysql = require('mysql');
 
 // liaison fichier environnemet
@@ -39,7 +39,7 @@ app.use((req, res) => {
     });
 
 
-
+    app.use(helmet());
 
 
 app.use('/images/posts', express.static(path.join(__dirname, 'images/posts')));
