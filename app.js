@@ -28,7 +28,7 @@ app.use((req, res) => {
     });
 
 
-    app.use(helmet());
+app.use(helmet());
 
 
 app.use('/images/posts', express.static(path.join(__dirname, 'images/posts')));

@@ -1,12 +1,20 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const db = require('../mySQL');
 
 // declaration de dotenv pour la recuperation des donnees 'token' du fichier .env
 require('dotenv').config();
 
  // creation d'un nouvel utilisateur
  exports.signup = (req, res, next) => {
-    db.query("INSERT INTO `user` (`email`,`password`) values (`email`,`password`)", )
+    const sqlCreateUser = "INSERT INTO `user` (`pseudo`,email`,`password`) VALUES (?, ?, ?)";
+    bcrypt.hash(req.body.password, 10)      // on hash le mot de passe 10 fois
+    .then(hash => {
+        db.query(sqlCreateUser, [req.body.pseudo, req.body.email, hash], (err,result) => {
+            //Requete terminée, traiter la reponse
+        })
+        .catch(error => res.status(500).json({ error }));
+    });
 };
 // exports.signup = (req, res, next) => {           
 //     bcrypt.hash(req.body.password, 10)      // on hash le mot de passe 10 fois
@@ -24,7 +32,10 @@ require('dotenv').config();
 
 // connexion d'un utilisateur existant
 exports.login = (req, res, next) => {
-    db.query("SELECT * FROM `user` WHERE pseudo=?",)
+    const sqlLoginUser = "SELECT * FROM `user` WHERE email=?"
+    db.query(sqlLoginUser, [], (err,result) => {
+
+    });
 };
 
 
