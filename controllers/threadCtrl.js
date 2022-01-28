@@ -2,7 +2,7 @@ const db = require('../mySQL');
 
 // creer un post
 exports.createPost = (req, res, next) => {
-    const sqlCreatePost = "INSERT INTO 'subject' ('date_modify', 'id_user', 'title', 'id_type', 'id_category')"; // Penser à renseigner les valeurs
+    const sqlCreatePost ="INSERT INTO 'subject' ('date_create', 'id_user', 'title', 'id_type', 'id_category')"; 
     const createPost = [id_user, title, id_type, id_category];
 
     db.query(sqlCreatePost, createPost, (err, result) => {
@@ -13,14 +13,15 @@ exports.createPost = (req, res, next) => {
 
 // recuperer tous les posts
 exports.getAllPosts = (req, res, next) => {
-    const sqlGetAllPosts = "SELECT * FROM subject";
-    db.query(sqlGetAllPosts,[],(err,result) => {
-        if (result) {
-            res.status(201).json({result})//N'oublie pas de renvoyer des données supplémentaires tel que la page courante et le nombre total de pages
-        } else {
-           return res.status(400).json({error})
-        }
-    })
+    const sqlGetAllPosts = "SELECT * FROM subject LIMIT 50 ORDER BY date_create DESC";
+    const getAllPosts = [id_user, title, id_category, show_subject]
+    db.query(sqlGetAllPosts, getAllPosts, (err, result) => {
+      if (result) {
+        res.status(201).json({ result }); //N'oublie pas de renvoyer des données supplémentaires tel que la page courante et le nombre total de pages
+      } else {
+        return res.status(400).json({ error });
+      }
+    });
 
 };
 
@@ -42,13 +43,14 @@ exports.addComment = (req, res, next) => {
 // Modifier commentaire sur un post
 exports.modifyComment = (req, res, next) => {
     const sqlModifyComment = "UPDATE comments SET 'date_modify' = ?, 'comment' = ? WHERE id_comment=?"; 
-    db.query(sqlModifyComment,[],(err,result) => {
-        if(result) {
-            res.status(201).json({result})
-        } else {
-            return res.status(400).json({message:' Publication non trouvé '})
-        }
-    })
+    const modidyComment = [comment];
+    db.query(sqlModifyComment, modidyComment, (err, result) => {
+      if (result) {
+        res.status(201).json({ result });
+      } else {
+        return res.status(400).json({ message: " Publication non trouvé " });
+      }
+    });
 
 };
 

@@ -1,12 +1,14 @@
 const mysql = require('mysql');
 
+// liaison fichier environnemet
+require('dotenv').config()
+
 // connection MySQL
 const db = mysql.createConnection({
-    host: process.env.HOST,
-    user: process.env.USER,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE,
-    
+  host: process.env.HOST,
+  database: process.env.DATABASE,
+  user: process.env.USER,
+  password: process.env.PASSWORD,
 });
 
 db.connect(function(err) {

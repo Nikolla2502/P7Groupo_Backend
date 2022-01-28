@@ -7,9 +7,11 @@ const path = require('path');
 // prevention contre les attaques XSS dans les HTTP headers
 const helmet = require('helmet');     
 
+// Importation des routes
+// const userRoute = require("./routes/userRoute");
+// const threadRoute = require("./routes/threadRoute");
 
-// liaison fichier environnemet
-require('dotenv').config()
+
 
 // connexion mySQL
 require ('./mySQL.js')
@@ -24,7 +26,7 @@ app.use((req, res, next) => {
 
 
 app.use((req, res) => {
-    res.json({ message: 'Votre requête a bien été reçue !' });
+    res.json({ message: "Votre requête a bien été reçue !" });
     });
 
 
@@ -33,6 +35,9 @@ app.use(helmet());
 
 app.use('/images/posts', express.static(path.join(__dirname, 'images/posts')));
 
+
+// app.use('/api/user', userRoute);
+// app.use('/api/thread', threadRoute);
 
 
 module.exports = app;
