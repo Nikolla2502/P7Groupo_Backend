@@ -8,8 +8,8 @@ const path = require('path');
 const helmet = require('helmet');     
 
 // Importation des routes
-// const userRoute = require("./routes/userRoute");
-// const threadRoute = require("./routes/threadRoute");
+const userRoute = require("./routes/userRoute");
+const threadRoute = require("./routes/threadRoute");
 
 
 
@@ -25,9 +25,9 @@ app.use((req, res, next) => {
     });
 
 
-app.use((req, res) => {
-    res.json({ message: "Votre requête a bien été reçue !" });
-    });
+// app.use((req, res) => {
+//     res.json({ message: "Votre requête a bien été reçue !" });
+//     });
 
 
 app.use(helmet());
@@ -36,8 +36,8 @@ app.use(helmet());
 app.use('/images/posts', express.static(path.join(__dirname, 'images/posts')));
 
 
-// app.use('/api/user', userRoute);
-// app.use('/api/thread', threadRoute);
+app.use('/api/user', userRoute);
+app.use('/api/thread', threadRoute);
 
 
 module.exports = app;
