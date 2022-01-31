@@ -3,17 +3,22 @@ const db = require('../mySQL');
 // Les posts (subject)
 // Creer un post
 exports.createPost = (req, res, next) => {
-    const sqlCreatePost ="INSERT INTO 'subject' ('date_create', 'id_user', 'title', 'id_type', 'id_category')"; 
-    const createPost = [id_user, title, id_type, id_category];
-    db.query(sqlCreatePost, createPost, (err, result) => {
-      // Si INSERT ok, INSERT contenu dans comments, ne pas oublier de récupérer l'id du sujet (variable result.insertId)
+    const sqlCreatePost ="INSERT INTO 'subject' ('date_create', 'id_user', 'title', 'id_type', 'id_category') VALUES (?, ?, ?, ?, ?"; 
+    const createPost = [date_create, id_user, title, id_type, id_category];
+  db.query(sqlCreatePost, createPost, (err, result) => {
+    if (result) {
+      res.status(201).json({ result });
+    } else {
+      return res.status(400).json({ error });
+    }
     });
-
+    // Si INSERT ok, INSERT contenu dans comments, ne pas oublier de récupérer l'id du sujet (variable result.insertId)
+    
 };
 // Recuperer tous les posts
 exports.getAllPosts = (req, res, next) => {
     const sqlGetAllPosts = "SELECT * FROM subject LIMIT 50 ORDER BY date_create DESC";
-    const getAllPosts = [id_user, title, id_category, show_subject]
+  const getAllPosts = [id_user, title, id_category, show_subject];
     db.query(sqlGetAllPosts, getAllPosts, (err, result) => {
       if (result) {
         res.status(201).json({ result }); //N'oublie pas de renvoyer des données supplémentaires tel que la page courante et le nombre total de pages
@@ -22,17 +27,14 @@ exports.getAllPosts = (req, res, next) => {
       }
     });
 };
-// Post user like dislike
-exports.userLikePost = (req, res, next) => {
 
-};
 
 
 // comments
 // ajout commentaire sur un post
 exports.addComment = (req, res, next) => {
-    const sqlAddComment ="INSERT INTO comments ('date_create', 'id_user', 'comment') "; 
-    const addComment = [id_user, comment];
+    const sqlAddComment ="INSERT INTO comments ('date_create', id_subject, 'id_user', 'comment') VALUES (?, ?, ?, ?) "; 
+    const addComment = [date_create, id_subject, id_user, comment];
 
     db.query(sqlAddComment, addComment, (err, result) => {
       if (result) {
@@ -45,8 +47,8 @@ exports.addComment = (req, res, next) => {
 };
 // Modifier commentaire sur un post
 exports.modifyComment = (req, res, next) => {
-    const sqlModifyComment = "UPDATE comments SET 'date_modify' = ?, 'comment' = ? WHERE id_comment=?"; 
-    const modidyComment = [comment];
+    const sqlModifyComment = "UPDATE comments SET 'date_modify' = ?, 'comment' = ? WHERE id_comment=? AND id_user=?"; 
+    const modidyComment = [id_comment, id_user, comment];
     db.query(sqlModifyComment, modidyComment, (err, result) => {
       if (result) {
         res.status(201).json({ result });
@@ -57,9 +59,14 @@ exports.modifyComment = (req, res, next) => {
 };
 // Comment user like dislike
 exports.userLikeComment = (req, res, next) => {
-
+  const sqlLikeDislikeComment = "INSERT INTO 'like_dislike' ('id_comment','id_user','islike') VALUES (?, ?, ?";
+  const likeDislikeComment = [id_comment, id_user, islike];
+  db.query(sqlLikeDislikeComment, likeDislikeComment, (err, result) => {
+    if (islike === 1) {
+      
+    }
+  });
 };
-
 // **********************Admin Privilege ****************************************************
 
 // delete post
