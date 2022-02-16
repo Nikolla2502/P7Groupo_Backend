@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 // declaration de dotenv pour la recuperation des donnees 'token' du fichier .env
-require('dotenv').config();
+require("dotenv").config({ path: "./config/.env" });
 
 module.exports = (req, res, next) => {
     try {

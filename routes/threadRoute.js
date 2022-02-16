@@ -11,7 +11,7 @@ const multer = require('../middleware/multer-config');
 router.post('/', auth, multer, threadCtrl.createPost);
 
 // recuperer tous les posts
-router.get('/', auth, threadCtrl.getAllPosts);
+router.get('/', threadCtrl.getAllPosts);
 
 
 

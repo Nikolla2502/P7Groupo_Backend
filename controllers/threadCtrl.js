@@ -1,29 +1,34 @@
-const db = require('../mySQL');
+const db = require('../config/mySQL');
 
 // Les posts (subject)
 // Creer un post
 exports.createPost = (req, res, next) => {
-    const sqlCreatePost ="INSERT INTO 'subject' ('date_create', 'id_user', 'title', 'id_type', 'id_category') VALUES (?, ?, ?, ?, ?"; 
-    const createPost = [date_create, id_user, title, id_type, id_category];
-  db.query(sqlCreatePost, createPost, (err, result) => {
-    if (result) {
-      res.status(201).json({ result });
-    } else {
-      return res.status(400).json({ error });
-    }
+    const sqlCreatePost ="INSERT INTO `subject` (id_user, title, id_type, id_category) VALUES (?, ?, ?, ?)"; 
+    const createPost = [id_user, title, id_type, id_category];
+    db.query(sqlCreatePost, createPost, (err, result) => {
+        if (result) {
+            res.status(201).json({ result });
+        } else {
+            res.status(400).json({ error });
+        }
     });
     // Si INSERT ok, INSERT contenu dans comments, ne pas oublier de récupérer l'id du sujet (variable result.insertId)
     
 };
 // Recuperer tous les posts
-exports.getAllPosts = (req, res, next) => {
-    const sqlGetAllPosts = "SELECT * FROM subject LIMIT 50 ORDER BY date_create DESC";
-  const getAllPosts = [id_user, title, id_category, show_subject];
+exports.getAllPosts = (req, res) => {
+    const sqlGetAllPosts ="SELECT * FROM subject WHERE show_subject=1 ORDER BY date_create DESC  LIMIT 0,10;";
+        const getAllPosts = [
+          req.body.id_user,
+          req.body.title,
+          req.body.id_category,
+          req.body.show_subject,
+        ];
     db.query(sqlGetAllPosts, getAllPosts, (err, result) => {
       if (result) {
-        res.status(201).json({ result }); //N'oublie pas de renvoyer des données supplémentaires tel que la page courante et le nombre total de pages
+        res.status(200).json({ result }); //N'oublie pas de renvoyer des données supplémentaires tel que la page courante et le nombre total de pages
       } else {
-        return res.status(400).json({ error });
+        return res.status(400).json({ message: " Publication non trouvé " });
       }
     });
 };
@@ -33,8 +38,8 @@ exports.getAllPosts = (req, res, next) => {
 // comments
 // ajout commentaire sur un post
 exports.addComment = (req, res, next) => {
-    const sqlAddComment ="INSERT INTO comments ('date_create', id_subject, 'id_user', 'comment') VALUES (?, ?, ?, ?) "; 
-    const addComment = [date_create, id_subject, id_user, comment];
+    const sqlAddComment ="INSERT INTO comments (id_subject, id_user, comment) VALUES (?, ?, ?, ?) "; 
+    const addComment = [id_subject, id_user, comment];
 
     db.query(sqlAddComment, addComment, (err, result) => {
       if (result) {
@@ -47,19 +52,19 @@ exports.addComment = (req, res, next) => {
 };
 // Modifier commentaire sur un post
 exports.modifyComment = (req, res, next) => {
-    const sqlModifyComment = "UPDATE comments SET 'date_modify' = ?, 'comment' = ? WHERE id_comment=? AND id_user=?"; 
+    const sqlModifyComment = "UPDATE comments SET 'date_modify' = NOW(), 'comment' = ? WHERE id_comment=? AND id_user=?"; 
     const modidyComment = [id_comment, id_user, comment];
     db.query(sqlModifyComment, modidyComment, (err, result) => {
       if (result) {
         res.status(201).json({ result });
       } else {
-        return res.status(400).json({ message: " Publication non trouvé " });
+        return res.status(400).json({ message: " Requete non autorisée " });
       }
     });
 };
 // Comment user like dislike
 exports.userLikeComment = (req, res, next) => {
-  const sqlLikeDislikeComment = "INSERT INTO 'like_dislike' ('id_comment','id_user','islike') VALUES (?, ?, ?";
+  const sqlLikeDislikeComment = "INSERT INTO like_dislike (id_comment,id_user,islike) VALUES (?, ?, ?)";
   const likeDislikeComment = [id_comment, id_user, islike];
   db.query(sqlLikeDislikeComment, likeDislikeComment, (err, result) => {
     if (islike === 1) {
@@ -76,7 +81,7 @@ exports.deletePost = (req, res, next) => {
 
   db.query(sqldeletePost, deletePost, (err, result) => {
     if (result) {
-      res.status(201).json({ result });
+      res.status(200).json({ message: "Publication modérée" });
     } else {
       return res.status(400).json({ message: " Publication non trouvé " });
     }
@@ -89,7 +94,7 @@ exports.deleteComment = (req, res, next) => {
   const deleteComment = [show_comment];
     db.query(sqldeleteComment, deleteComment, (err, result) => {
       if (result) {
-        res.status(201).json({ result });
+        res.status(200).json({ message : "Publication modérée" });
       } else {
         return res.status(400).json({ message: " Publication non trouvé " });
       }

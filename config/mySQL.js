@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 
 // liaison fichier environnemet
-require('dotenv').config()
+require("dotenv").config({ path: "./config/.env" });
 
 // connection MySQL
 const db = mysql.createConnection({
