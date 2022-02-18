@@ -17,7 +17,8 @@ exports.createPost = (req, res, next) => {
 };
 // Recuperer tous les posts
 exports.getAllPosts = (req, res) => {
-    const sqlGetAllPosts ="SELECT * FROM subject WHERE show_subject=1 ORDER BY date_create DESC  LIMIT 0,10;";
+  const sqlGetAllPosts =
+    "WITH subject_comment AS (SELECT id_comment,comment,id_user,id_subject,	MIN(date_create) date_create FROM comments GROUP BY id_subject LIMIT 0,10 ) SELECT * FROM subject_comment sc JOIN subject s ON sc.id_subject = s.id_subject ORDER BY s.date_create DESC;";
         const getAllPosts = [
           req.body.id_user,
           req.body.title,
