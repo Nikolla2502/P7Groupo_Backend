@@ -18,7 +18,13 @@ exports.createPost = (req, res, next) => {
 // Recuperer tous les posts
 exports.getAllPosts = (req, res) => {
   const sqlGetAllPosts =
-    "WITH subject_comment AS (SELECT id_comment,comment,id_user,id_subject,	MIN(date_create) date_create FROM comments GROUP BY id_subject LIMIT 0,10 ) SELECT * FROM subject_comment sc JOIN subject s ON sc.id_subject = s.id_subject ORDER BY s.date_create DESC;";
+    "WITH subject_comment AS " +
+    "(SELECT id_comment, comment, id_user, id_subject, MIN(date_create) date_create FROM comments GROUP BY id_subject )" +
+    "SELECT * FROM subject_comment sc " +
+    "JOIN subject s ON sc.id_subject = s.id_subject " +
+    "JOIN category c ON s.id_category = c.id_category " +
+    "JOIN user u ON s.id_user = u.id_user " +
+	  " ORDER BY s.date_create DESC; ";
         const getAllPosts = [
           req.body.id_user,
           req.body.title,
@@ -34,6 +40,28 @@ exports.getAllPosts = (req, res) => {
     });
 };
 
+// Recuperer les commentaires des posts
+exports.getAllComments = (req, res) => {
+    const sqlGetAllComments =
+      "	WITH subject_comments AS " +
+      "(SELECT id_comment,comment,id_user,id_subject,MIN(date_create) date_create	FROM comments c	GROUP BY id_comment	LIMIT 0,10)" +
+      "SELECT * FROM subject_comments sc " + 
+      "JOIN subject s ON sc.id_subject = s.id_subject " +
+      "WHERE sc.id_user != s.id_user "
+      "ORDER BY s.date_create DESC; ";
+    const getAllComments = [
+      req.body.id_user,
+      req.body.comment,
+      req.body.show_comment,
+  ];
+      db.query(sqlGetAllComments, getAllComments, (err, result) => {
+        if (result) {
+          res.status(200).json({ result });
+        } else {
+          return res.status(400).json({ message: " Récuperation des commentaires echouée ! " });
+        }
+      });
+}
 
 
 // comments

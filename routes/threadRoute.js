@@ -13,6 +13,8 @@ router.post('/', auth, multer, threadCtrl.createPost);
 // recuperer tous les posts
 router.get("/", threadCtrl.getAllPosts);
 
+// recuperer les comments sur un post all users
+router.get("/comments", threadCtrl.getAllComments);
 
 
 // Les commentaires (comments)
