@@ -27,27 +27,27 @@ exports.signup = (req, res, next) => {
 };
 
 // connexion d'un utilisateur existant
-exports.login = (req, res, next) => {
+exports.login = (req, res) => {
   const sqlLoginUser = "SELECT * FROM user WHERE email=?";
 
   db.query(sqlLoginUser, [], (err, result) => {
-    if (err) {
-      return res.status(400).json({ message: "Utilisateur non trouvé !" });
-    } else {
+    if (result) {
       bcrypt
-        .compare(req.body.password, user.password) // bcrypt compare le password de l'utilisateur avec le password stocke dans la bdd
-        .then((valid) => {
-          if (!valid) {
-            return res.status(401).json({ error: "Mot de passe Incorrect" });
-          }
-          res.status(200).json({
-            userId: user._id,
-            token: jwt.sign({ userId: user._id }, process.env.TOKEN, {
-              expiresIn: "24h",
-            }),
-          });
-        })
-        .catch((err) => res.status(400).json({ error }));
+      .compare(req.body.password, user.password) // bcrypt compare le password de l'utilisateur avec le password stocke dans la bdd
+      .then((valid) => {
+        if (!valid) {
+          return res.status(401).json({ error: "Mot de passe Incorrect" });
+        }
+        res.status(200).json({
+          userId: user._id,
+          token: jwt.sign({ userId: user._id }, process.env.TOKEN, {
+            expiresIn: "24h",
+          }),
+        });
+      })
+      .catch((err) => res.status(400).json({ error }));
+    } else {
+    return res.status(400).json({ message: "Utilisateur non trouvé !" });
     }
   });
 };
@@ -64,21 +64,25 @@ exports.moderateUser = (req, res) => {
     }
   });
 };
-
+// Acces profil
+exports.profil = (req, res) => {
+  const sqlUserProfil = "SELECT * FROM USER WHERE user_id=?"
+  const getUserProfil = [];
+  db.query(sqlUserProfil, getUserProfil, (err, profil) => {
+              if (profil) {
+                res.status(200).json({ profil });
+              } else {
+                return res.status(400).json({ err});
+              }
+    });
+}
 // obtenir tous les users 
 exports.getAllUsers = (req, res) => {
   const sqlGetAllUsers = "SELECT * FROM user"
-  const getAllUsers = [
-    req.body.id_user,
-    req.body.pseudo,
-    req.body.email,
-    req.body.password,
-    req.body.id_role,
-    req.body.statut
-  ];
+  const getAllUsers = [];
       db.query(sqlGetAllUsers, getAllUsers, (err, result) => {
         if (result) {
-          res.status(200).json({ result }); //N'oublie pas de renvoyer des données supplémentaires tel que la page courante et le nombre total de pages
+          res.status(200).json({ result }); 
         } else {
           return res.status(400).json({ error });
         }

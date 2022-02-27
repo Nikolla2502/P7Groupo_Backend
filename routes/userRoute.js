@@ -8,7 +8,11 @@ const passwordValidator = require("../middleware/passwordValidator");
 router.post("/signup", passwordValidator, userCtrl.signup);
 
 // connexion utilisateur
-router.post("/login", passwordValidator, userCtrl.login);
+router.post("/login",userCtrl.login);
+
+
+// acces profil
+router.get("/:id", userCtrl.profil);
 
 // suppression utilisateur
 router.post("/:id", passwordValidator, userCtrl.moderateUser);
