@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 
 const userCtrl = require("../controllers/userCtrl");
-const passwordValidator = require("../middleware/passwordValidator");
+// const passwordValidator = require("../middleware/passwordValidator");
 
 // creation nouvel utilisateur
-router.post("/signup", passwordValidator, userCtrl.signup);
+router.post("/signup", userCtrl.signup);
 
 // connexion utilisateur
 router.post("/login",userCtrl.login);
@@ -15,7 +15,7 @@ router.post("/login",userCtrl.login);
 router.get("/:id", userCtrl.profil);
 
 // suppression utilisateur
-router.post("/:id", passwordValidator, userCtrl.moderateUser);
+router.post("/:id", userCtrl.moderateUser);
 
 // OBTENIR LA LISTE DES USERS
 router.get("/", userCtrl.getAllUsers);

@@ -55,6 +55,24 @@ exports.getAllComments = (req, res) => {
       });
 }
 
+// Recuperer un post
+exports.getPost = (req, res) => {
+    const sqlGetPost =
+      "	WITH subject_comments AS " +
+      "(SELECT id_comment,comment,id_user,id_subject,MIN(date_create) date_create	FROM comments c	GROUP BY id_comment	LIMIT 0,10)" +
+      "SELECT * FROM subject_comments sc " +
+      "JOIN subject s ON sc.id_subject = s.id_subject " +
+      "JOIN user u ON sc.id_user = u.id_user " +
+      "WHERE id_subject = 1; ";
+    const getPost = [];
+      db.query(sqlGetPost, getPost, (err, post) => {
+        if (post) {
+          res.status(200).json({ post });
+        } else {
+          return res.status(400).json({ message: " Récuperation du post echouée ! " });
+        }
+      });
+}
 
 // comments
 // ajout commentaire sur un post

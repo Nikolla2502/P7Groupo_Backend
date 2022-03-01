@@ -16,6 +16,8 @@ router.get("/", threadCtrl.getAllPosts);
 // recuperer les comments sur un post all users
 router.get("/comments", threadCtrl.getAllComments);
 
+//recuperer un post
+router.get("/:id", threadCtrl.getPost);
 
 // Les commentaires (comments)
 // ajout commentaire sur un post
@@ -24,6 +26,8 @@ router.post('/:id', auth, multer, threadCtrl.addComment);
 router.put('/:id', auth, multer, threadCtrl.modifyComment);
 // Comments like dislike
 router.post("/:id/like", auth, threadCtrl.userLikeComment);
+
+
 
 // admin privilege
 // effacer un post

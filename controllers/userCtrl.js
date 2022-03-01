@@ -6,9 +6,9 @@ const db = require("../config/mySQL");
 require("dotenv").config();
 
 // creation d'un nouvel utilisateur
-exports.signup = (req, res, next) => {
+exports.signup = (req, res) => {
   const sqlCreateUser =
-    "INSERT INTO `user` (`pseudo`,`email`,`password`) VALUES (?, ?, ?)";
+    "INSERT INTO user (`pseudo`,`email`,`password`) VALUES (?, ?, ?)";
   bcrypt
     .hash(req.body.password, 10) // on hash le mot de passe 10 fois
     .then((hash) => {
@@ -47,7 +47,7 @@ exports.login = (req, res) => {
       })
       .catch((err) => res.status(400).json({ error }));
     } else {
-    return res.status(400).json({ message: "Utilisateur non trouvé !" });
+    return res.status(400).json({ message: "Utilisateur inexistant !" });
     }
   });
 };
@@ -78,11 +78,11 @@ exports.profil = (req, res) => {
 }
 // obtenir tous les users 
 exports.getAllUsers = (req, res) => {
-  const sqlGetAllUsers = "SELECT * FROM user"
+  const sqlGetAllUsers = "SELECT pseudo,email,id_role,statut FROM user;";
   const getAllUsers = [];
-      db.query(sqlGetAllUsers, getAllUsers, (err, result) => {
-        if (result) {
-          res.status(200).json({ result }); 
+      db.query(sqlGetAllUsers, getAllUsers, (err, user) => {
+        if (user) {
+          res.status(200).json({ user }); 
         } else {
           return res.status(400).json({ error });
         }
