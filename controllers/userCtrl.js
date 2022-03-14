@@ -15,22 +15,23 @@ exports.signup = (req, res) => {
       db.query(
         sqlCreateUser,
         [req.body.pseudo, req.body.email, hash],
-        (err, result) => {
+        function (err, result) {
           if (result) {
             res.status(201).json({ message: "Utilisateur créé" });
           } else {
-            return res.status(400).json({ err });
+            return res.status(400).json({ message: "Creation echouée !!" });
           }
         }
-      ).catch((error) => res.status(400).json({ error }));
-    });
+      );
+    })
+    .catch((err) => res.status(400).json({ message: "erreur !!" }));
 };
 
 // connexion d'un utilisateur existant
 exports.login = (req, res) => {
   const sqlLoginUser = "SELECT * FROM user WHERE email=?";
 
-  db.query(sqlLoginUser, [], (err, result) => {
+  db.query(sqlLoginUser, [], (error, result) => {
     if (result) {
       bcrypt
       .compare(req.body.password, user.password) // bcrypt compare le password de l'utilisateur avec le password stocke dans la bdd
@@ -47,7 +48,7 @@ exports.login = (req, res) => {
       })
       .catch((err) => res.status(400).json({ error }));
     } else {
-    return res.status(400).json({ message: "Utilisateur inexistant !" });
+    return res.status(400).json({ message: "Utilisateur egare !" });
     }
   });
 };
@@ -56,9 +57,9 @@ exports.login = (req, res) => {
 exports.moderateUser = (req, res) => {
   const sqlModerateUser = "UPDATE user SET statut =1 where id_user=?";
 
-  db.query(sqlModerateUser, [], (err, result) => {
+  db.query(sqlModerateUser, [], (err, res) => {
     if (err) {
-      return res.status(400).json({ message: "Utilisateur non trouvé !" });
+      return res.status(400).json({ message: "Utilisateur inexistant !" });
     } else {
       res.status(200).json({ message: "Utilisateur moderé !" });
     }
@@ -78,7 +79,10 @@ exports.profil = (req, res) => {
 }
 // obtenir tous les users 
 exports.getAllUsers = (req, res) => {
-  const sqlGetAllUsers = "SELECT pseudo,email,id_role,statut FROM user;";
+  const sqlGetAllUsers =
+    "SELECT  pseudo,email,statut,level FROM user u " +
+    "JOIN role r " +
+    "ON u.role_id = r.id_role;";
   const getAllUsers = [];
       db.query(sqlGetAllUsers, getAllUsers, (err, user) => {
         if (user) {

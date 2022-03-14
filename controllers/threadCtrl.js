@@ -38,16 +38,31 @@ exports.getAllPosts = (req, res) => {
 // Recuperer les commentaires des posts
 exports.getAllComments = (req, res) => {
     const sqlGetAllComments =
-      "	WITH subject_comments AS " +
-      "(SELECT id_comment,comment,id_user,id_subject,MIN(date_create) date_create	FROM comments c	GROUP BY id_comment	LIMIT 0,10)" +
-      "SELECT * FROM subject_comments sc " +
-      "JOIN subject s ON sc.id_subject = s.id_subject " +
-      "JOIN user u ON sc.id_user = u.id_user " +
-      "WHERE sc.id_user != s.id_user " + 
-      "ORDER BY s.date_create DESC; ";
+      "SELECT * FROM comments c " +
+      "JOIN user u ON c.id_user = u.id_user " +
+      "JOIN subject s	ON c.id_subject = s.id_subject " +
+      "WHERE s.id_subject = 1 " +
+      " ORDER BY c.date_create; ";
     const getAllComments = [];
-      db.query(sqlGetAllComments, getAllComments, (err, comment) => {
+      db.query(sqlGetAllComments, getAllComments, (err, comment) => {//requête récupération info thread
         if (comment) {
+          //Requete recueration des commentaires
+          // {
+          //   title: 'titre',
+          //   author: 'auteur',
+          //   comments: [
+          //     {
+          //       content: 'commentaire 1',
+          //       date_create: 'date',
+          //       etc...
+          //     },
+          //     {
+          //       content: 'commentaire 2',
+          //       date_create: 'date',
+          //       etc...
+          //     },
+          //   ]
+          // };
           res.status(200).json({ comment });
         } else {
           return res.status(400).json({ message: " Récuperation des commentaires echouée ! " });

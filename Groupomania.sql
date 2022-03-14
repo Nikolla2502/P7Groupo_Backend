@@ -1,1 +1,1 @@
-SELECT * FROM subject LIMIT 50 ORDER BY date_create DESC
+SELECT * FROM subject  ORDER BY date_create DESC LIMIT 50;
